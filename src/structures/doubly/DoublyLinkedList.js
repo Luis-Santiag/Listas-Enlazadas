@@ -75,25 +75,96 @@ class DoublyLinkedList {
   }
 
   countOccurrences(value) {
-    throw new Error(
-      "TODO RETO: Implementar countOccurrences(value) en DoublyLinkedList."
-    );
+    let count = 0;
+    let current = this.head;
+
+    while (current !== null) {
+      if (this._isSameValue(current.value, value)) {
+        count++;
+      }
+      current = current.next;
+    }
+
+    return count;
   }
 
   clean() {
-    throw new Error("TODO RETO: Implementar clean() en DoublyLinkedList.");
+    let removed = 0;
+    let current = this.head;
+
+    while (current !== null) {
+      let next = current.next;
+
+      current.next = null;
+      current.previous = null;
+
+      current = next;
+      removed++;
+    }
+
+    this.head = null;
+    this.tail = null;
+    this._size = 0;
+
+    return removed;
   }
 
   reverseInPlace() {
-    throw new Error(
-      "TODO RETO: Implementar reverseInPlace() en DoublyLinkedList."
-    );
+    let current = this.head;
+    let temp = null;
+
+    while (current !== null) {
+      temp = current.previous;
+      current.previous = current.next;
+      current.next = temp;
+      current = current.previous;
+    }
+
+    if (temp !== null) {
+      this.head = temp.previous;
+    }
+
+    let aux = this.head;
+    this.head = this.tail;
+    this.tail = aux;
   }
 
   removeDuplicates() {
-    throw new Error(
-      "TODO RETO: Implementar removeDuplicates() en DoublyLinkedList."
-    );
+    let removed = 0;
+    let current = this.head;
+
+    while (current !== null) {
+      let runner = current.next;
+
+      while (runner !== null) {
+        if (this._isSameValue(current.value, runner.value)) {
+
+          let next = runner.next;
+          let prev = runner.previous;
+
+          if (prev !== null) {
+            prev.next = next;
+          }
+
+          if (next !== null) {
+            next.previous = prev;
+          } else {
+            this.tail = prev;
+          }
+
+          this._size--;
+          removed++;
+          runner = next;
+
+        } else {
+          runner = runner.next;
+        }
+      }
+
+      current = current.next;
+    }
+
+    return removed;
   }
 
   size() {

@@ -45,7 +45,7 @@ class SinglyLinkedList {
   contains(value) {
     let current = this.head;
     while (current !== null) {
-      if (this._isSameValue(current.value, value)) {
+      if (this.isSameValue(current.value, value)) {
         return true;
       }
       current = current.next;
@@ -54,25 +54,85 @@ class SinglyLinkedList {
   }
 
   countOccurrences(value) {
-    throw new Error(
-      "TODO RETO: Implementar countOccurrences(value) en SinglyLinkedList."
-    );
+    let count = 0;
+    let current = this.head;
+
+    while (current !== null) {
+      if (this.isSameValue(current.value, value)) {
+        count++;
+      }
+      current = current.next;
+    }
+
+    return count;
   }
 
   clean() {
-    throw new Error("TODO RETO: Implementar clean() en SinglyLinkedList.");
+    let removed = 0;
+    let current = this.head;
+
+    while (current !== null) {
+      let next = current.next;
+      current.next = null;
+      current = next;
+      removed++;
+    }
+
+    this.head = null;
+    this.tail = null;
+    this._size = 0;
+
+    return removed;
   }
 
   reverseInPlace() {
-    throw new Error(
-      "TODO RETO: Implementar reverseInPlace() en SinglyLinkedList."
-    );
+    if (this.head === null || this.head.next === null) {
+      return;
+    }
+
+    let previous = null;
+    let current = this.head;
+    this.tail = this.head;
+
+    while (current !== null) {
+      let next = current.next;
+      current.next = previous;
+      previous = current;
+      current = next;
+    }
+
+    this.head = previous;
   }
 
   removeDuplicates() {
-    throw new Error(
-      "TODO RETO: Implementar removeDuplicates() en SinglyLinkedList."
-    );
+    let removed = 0;
+    let current = this.head;
+
+    while (current !== null) {
+      let runnerPrev = current;
+      let runner = current.next;
+
+      while (runner !== null) {
+        if (this.isSameValue(current.value, runner.value)) {
+          runnerPrev.next = runner.next;
+
+          if (runner === this.tail) {
+            this.tail = runnerPrev;
+          }
+
+          this._size--;
+          removed++;
+          runner = runnerPrev.next;
+        } else {
+          runnerPrev = runner;
+          runner = runner.next;
+        }
+      }
+
+      current = current.next;
+    }
+
+    return removed;
   }
 
   size() {
@@ -97,8 +157,8 @@ class SinglyLinkedList {
     return out;
   }
 
-  _isSameValue(left, right) {
-    return left === right;
+  isSameValue(left, right) {
+    return left === right || (left !== null && left === right);
   }
 }
 
